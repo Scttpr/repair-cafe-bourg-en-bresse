@@ -16,10 +16,6 @@
   balises <span class="tbd">...</span>, remplacez le texte, puis supprimez la
   classe "tbd".
 
-    [PERIODICITE]             ex. tous les 2e samedis du mois
-    [NOM DU LIEU]             ex. Centre social des Vennes
-    [ADRESSE COMPLETE]        rue + code postal + ville
-    [ACCES ET STATIONNEMENT]  bus, parking, accessibilite PMR
     [EMAIL DE CONTACT]        (a mettre AUSSI dans les 2 liens mailto:)
     [NUMERO DE TELEPHONE]     (a mettre AUSSI dans le lien tel:)
     [LIEN FACEBOOK]           (a mettre AUSSI dans le href du lien)
@@ -41,8 +37,9 @@
     data-cal="date"     date de la prochaine seance
     data-cal="debut"    heure de debut
     data-cal="fin"      heure de fin
-    data-cal="lieu"     nom du lieu     \ renseignes seulement si l'agenda
-    data-cal="adresse"  adresse         / expose le champ « Lieu »
+
+  Le lieu et l'adresse sont volontairement ecrits en dur : ils ne portent pas
+  de data-cal, l'agenda ne peut donc pas les ecraser.
 
   Toute modification manuelle de ces valeurs sera ecrasee a la prochaine
   execution. Pour changer la date affichee, modifiez l'agenda.
@@ -149,15 +146,9 @@
 
           <dt>Lieu</dt>
           <dd>
-            <span data-cal="lieu" class="tbd">[NOM DU LIEU]</span><br>
-            <span data-cal="adresse" class="tbd">[ADRESSE COMPLÈTE]</span>
+            Atelien dans le centre AFPA<br>
+            17 route de Seillon, 01000 Bourg-en-Bresse
           </dd>
-
-          <dt>Accès</dt>
-          <dd><span class="tbd">[ACCÈS ET STATIONNEMENT]</span></dd>
-
-          <dt>Rythme</dt>
-          <dd><span class="tbd">[PÉRIODICITÉ]</span></dd>
 
           <dt>Inscription</dt>
           <dd>

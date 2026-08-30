@@ -38,9 +38,12 @@ python3 scripts/test_prochaine_seance.py      # 19 tests, sans réseau
 ```
 
 Les éléments concernés portent un attribut `data-cal` dans `index.html` :
-`jour`, `date`, `debut`, `fin`, plus `lieu` et `adresse` si l'agenda expose le
-champ « Lieu ». **Ne les modifiez pas à la main**, ils sont écrasés à chaque
-exécution — pour changer la date affichée, changez l'agenda.
+`jour`, `date`, `debut` et `fin`. **Ne les modifiez pas à la main**, ils sont
+écrasés à chaque exécution — pour changer la date affichée, changez l'agenda.
+
+Le lieu et l'adresse sont écrits en dur, sans `data-cal` : ils ne bougent pas
+d'une séance à l'autre, et l'agenda ne peut pas les écraser. Le script sait les
+remplir (clés `lieu` et `adresse`) si vous rajoutez un jour les attributs.
 
 Le script gère les récurrences (`RRULE` hebdomadaires et mensuelles, y compris
 « 2e samedi » et « dernier samedi »), les exceptions `EXDATE`, les séances
@@ -59,7 +62,7 @@ avertissement. **C'est une heuristique fragile** : si quelqu'un ajoute un long
 Correctif : *Paramètres de l'agenda → Autorisations d'accès → Rendre disponible
 publiquement → **Afficher tous les détails de l'événement***. Préfixez ensuite
 les permanences par un mot-clé (`Permanence — …`) : le script filtre alors sur
-le titre, ce qui est fiable, et récupère au passage le lieu et l'adresse.
+le titre, ce qui est fiable.
 
 **2. Le fuseau de l'agenda est réglé sur UTC** (`X-WR-TIMEZONE:UTC`) au lieu
 d'Europe/Paris. Les séances sont saisies en heure de Paris — 15h30 — mais
@@ -95,10 +98,6 @@ classe `tbd` pour faire disparaître le surlignage.
 
 | Placeholder | Ce qu'il faut mettre |
 |---|---|
-| `[PÉRIODICITÉ]` | ex. tous les 2e samedis du mois |
-| `[NOM DU LIEU]` | ex. Centre social des Vennes |
-| `[ADRESSE COMPLÈTE]` | rue, code postal, ville |
-| `[ACCÈS ET STATIONNEMENT]` | bus, parking, accessibilité PMR |
 | `[EMAIL DE CONTACT]` | ⚠️ aussi dans 3 liens `mailto:` |
 | `[NUMÉRO DE TÉLÉPHONE]` | ⚠️ aussi dans le lien `tel:` |
 | `[LIEN FACEBOOK]` | ⚠️ aussi dans le `href` |
@@ -106,9 +105,8 @@ classe `tbd` pour faire disparaître le surlignage.
 | `[ANNÉE]` | année de référence des compteurs |
 | `[NOM DE L ASSOCIATION]` | raison sociale exacte, pied de page |
 
-`[NOM DU LIEU]` et `[ADRESSE COMPLÈTE]` disparaîtront d'eux-mêmes le jour où
-l'agenda exposera le champ « Lieu » (voir plus haut). Les liens à corriger en
-même temps que le texte portent un commentaire `TODO` juste au-dessus.
+Les liens à corriger en même temps que le texte portent un commentaire `TODO`
+juste au-dessus.
 
 Pour vérifier ce qu'il reste :
 
