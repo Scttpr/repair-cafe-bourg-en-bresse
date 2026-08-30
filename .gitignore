@@ -12,3 +12,7 @@ desktop.ini
 
 # Outils locaux
 .claude/settings.local.json
+
+# Python
+__pycache__/
+*.pyc

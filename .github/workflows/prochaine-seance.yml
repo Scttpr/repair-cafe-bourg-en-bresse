@@ -1,0 +1,52 @@
+name: Prochaine séance
+
+# Relit l'agenda public et réécrit la date de la prochaine séance dans
+# index.html. Le push sur main déclenche à son tour la reconstruction
+# GitHub Pages : rien d'autre à faire ici.
+
+on:
+  schedule:
+    # tous les jours à 04h17 UTC — largement assez pour un rendez-vous
+    # bimensuel, et décalé de l'heure ronde où GitHub sature.
+    - cron: "17 4 * * *"
+  workflow_dispatch:        # bouton « Run workflow » dans l'onglet Actions
+  push:
+    branches: [main]
+    paths:
+      - "scripts/prochaine_seance.py"
+      - ".github/workflows/prochaine-seance.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: prochaine-seance
+  cancel-in-progress: false
+
+jobs:
+  mettre-a-jour:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Tests du parseur
+        run: python3 scripts/test_prochaine_seance.py
+
+      - name: Lire l'agenda et remplir la page
+        run: python3 scripts/prochaine_seance.py
+
+      - name: Publier si la date a changé
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "Aucun changement : la page est déjà à jour."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Prochaine séance : mise à jour depuis l'agenda"
+          git push

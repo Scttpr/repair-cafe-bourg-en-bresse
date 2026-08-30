@@ -11,28 +11,41 @@
   ============================================================================
   CHECK-LIST AVANT PUBLICATION
   ----------------------------------------------------------------------------
-  Toutes les données ci-dessous sont des placeholders : elles apparaissent en
-  ORANGE SUR FOND ROSE dans la page tant qu'elles ne sont pas remplacées.
-  Cherchez les balises <span class="tbd">…</span> et remplacez le texte,
-  puis supprimez la classe "tbd".
+  Les champs restants sont des placeholders : ils apparaissent en ORANGE SUR
+  FOND ROSE dans la page tant qu'ils ne sont pas remplaces. Cherchez les
+  balises <span class="tbd">...</span>, remplacez le texte, puis supprimez la
+  classe "tbd".
 
-    [JOUR DE LA SEMAINE]      ex. samedi
-    [DATE DE LA PROCHAINE SÉANCE]  ex. 12 octobre 2026
-    [HEURE DE DÉBUT]          ex. 14h00
-    [HEURE DE FIN]            ex. 17h00
-    [PÉRIODICITÉ]             ex. tous les 2e samedis du mois
+    [PERIODICITE]             ex. tous les 2e samedis du mois
     [NOM DU LIEU]             ex. Centre social des Vennes
-    [ADRESSE COMPLÈTE]        rue + code postal + ville
-    [ACCÈS ET STATIONNEMENT]  bus, parking, accessibilité PMR
-    [EMAIL DE CONTACT]        (à mettre AUSSI dans les 2 liens mailto:)
-    [NUMÉRO DE TÉLÉPHONE]     (à mettre AUSSI dans le lien tel:)
-    [LIEN FACEBOOK]           (à mettre AUSSI dans le href du lien)
+    [ADRESSE COMPLETE]        rue + code postal + ville
+    [ACCES ET STATIONNEMENT]  bus, parking, accessibilite PMR
+    [EMAIL DE CONTACT]        (a mettre AUSSI dans les 2 liens mailto:)
+    [NUMERO DE TELEPHONE]     (a mettre AUSSI dans le lien tel:)
+    [LIEN FACEBOOK]           (a mettre AUSSI dans le href du lien)
     [NB]                      3 compteurs de la section Impact
-    [ANNÉE]                   année de référence des compteurs
+    [ANNEE]                   annee de reference des compteurs
     [NOM DE L ASSOCIATION]    raison sociale exacte, pied de page
 
-  Les liens à corriger en même temps que le texte portent tous un commentaire
+  Les liens a corriger en meme temps que le texte portent tous un commentaire
   « TODO » juste au-dessus.
+
+  ----------------------------------------------------------------------------
+  REMPLIS AUTOMATIQUEMENT — NE PAS EDITER A LA MAIN
+
+  Les elements marques data-cal="..." sont reecrits chaque nuit par
+  scripts/prochaine_seance.py, qui lit l'agenda Google public de
+  l'association (workflow .github/workflows/prochaine-seance.yml).
+
+    data-cal="jour"     jour de la semaine de la prochaine seance
+    data-cal="date"     date de la prochaine seance
+    data-cal="debut"    heure de debut
+    data-cal="fin"      heure de fin
+    data-cal="lieu"     nom du lieu     \ renseignes seulement si l'agenda
+    data-cal="adresse"  adresse         / expose le champ « Lieu »
+
+  Toute modification manuelle de ces valeurs sera ecrasee a la prochaine
+  execution. Pour changer la date affichee, modifiez l'agenda.
   ============================================================================
 -->
 </head>
@@ -123,21 +136,21 @@
       <h2 style="text-align:center">La prochaine séance</h2>
       <div class="session">
         <p class="session-date">
-          <span class="tbd">[JOUR DE LA SEMAINE]</span>
-          <span class="tbd">[DATE DE LA PROCHAINE SÉANCE]</span>
+          <span data-cal="jour">samedi</span>
+          <span data-cal="date">5 septembre 2026</span>
         </p>
         <dl>
           <dt>Horaires</dt>
           <dd>
-            De <span class="tbd">[HEURE DE DÉBUT]</span> à
-            <span class="tbd">[HEURE DE FIN]</span>. Dernier accueil 45&nbsp;minutes
+            De <span data-cal="debut">17h30</span> à
+            <span data-cal="fin">23h</span>. Dernier accueil 45&nbsp;minutes
             avant la fermeture, le temps de finir les réparations en cours.
           </dd>
 
           <dt>Lieu</dt>
           <dd>
-            <span class="tbd">[NOM DU LIEU]</span><br>
-            <span class="tbd">[ADRESSE COMPLÈTE]</span>
+            <span data-cal="lieu" class="tbd">[NOM DU LIEU]</span><br>
+            <span data-cal="adresse" class="tbd">[ADRESSE COMPLÈTE]</span>
           </dd>
 
           <dt>Accès</dt>
