@@ -9,24 +9,6 @@
 
 <!--
   ============================================================================
-  CHECK-LIST AVANT PUBLICATION
-  ----------------------------------------------------------------------------
-  Les champs restants sont des placeholders : ils apparaissent en ORANGE SUR
-  FOND ROSE dans la page tant qu'ils ne sont pas remplaces. Cherchez les
-  balises <span class="tbd">...</span>, remplacez le texte, puis supprimez la
-  classe "tbd".
-
-    [EMAIL DE CONTACT]        (a mettre AUSSI dans les 2 liens mailto:)
-    [NUMERO DE TELEPHONE]     (a mettre AUSSI dans le lien tel:)
-    [LIEN FACEBOOK]           (a mettre AUSSI dans le href du lien)
-    [NB]                      3 compteurs de la section Impact
-    [ANNEE]                   annee de reference des compteurs
-    [NOM DE L ASSOCIATION]    raison sociale exacte, pied de page
-
-  Les liens a corriger en meme temps que le texte portent tous un commentaire
-  « TODO » juste au-dessus.
-
-  ----------------------------------------------------------------------------
   REMPLIS AUTOMATIQUEMENT — NE PAS EDITER A LA MAIN
 
   Les elements marques data-cal="..." sont reecrits chaque nuit par
@@ -38,11 +20,10 @@
     data-cal="debut"    heure de debut
     data-cal="fin"      heure de fin
 
-  Le lieu et l'adresse sont volontairement ecrits en dur : ils ne portent pas
-  de data-cal, l'agenda ne peut donc pas les ecraser.
-
   Toute modification manuelle de ces valeurs sera ecrasee a la prochaine
   execution. Pour changer la date affichee, modifiez l'agenda.
+
+  Le reste de la page est ecrit en dur et ne bouge que par edition manuelle.
   ============================================================================
 -->
 </head>
@@ -156,8 +137,7 @@
             Prévoyez un peu d'attente les jours d'affluence, le café est là pour ça.
           </dd>
         </dl>
-        <!-- TODO : remplacer l'adresse dans le mailto ci-dessous -->
-        <a class="btn btn-outline" href="mailto:[EMAIL DE CONTACT]">Poser une question avant de venir</a>
+        <a class="btn btn-outline" href="mailto:repair.cafe.bourgenbresse@gmail.com">Poser une question avant de venir</a>
       </div>
     </div>
   </section>
@@ -285,28 +265,6 @@
     </div>
   </section>
 
-  <!-- ============================================================== IMPACT -->
-  <section class="impact on-dark">
-    <div class="wrap">
-      <h2>Notre impact en <span class="tbd">[ANNÉE]</span></h2>
-      <p class="section-intro">Ce que ça donne, mis bout à bout.</p>
-      <ul class="stats">
-        <li>
-          <span class="num tbd">[NB]</span>
-          <span class="label">objets réparés</span>
-        </li>
-        <li>
-          <span class="num tbd">[NB]</span>
-          <span class="label">kg de déchets évités</span>
-        </li>
-        <li>
-          <span class="num tbd">[NB]</span>
-          <span class="label">bénévoles actifs</span>
-        </li>
-      </ul>
-    </div>
-  </section>
-
   <!-- =========================================================== BÉNÉVOLES -->
   <section id="benevoles" class="bg-lavender-lt">
     <div class="wrap">
@@ -324,8 +282,7 @@
             café, l'affichage et le comptage des objets. Deux heures par séance
             suffisent.
           </p>
-          <!-- TODO : remplacer l'adresse dans le mailto ci-dessous -->
-          <p><a class="btn btn-primary" href="mailto:[EMAIL DE CONTACT]?subject=Je%20souhaite%20devenir%20b%C3%A9n%C3%A9vole">Je veux aider</a></p>
+          <p><a class="btn btn-primary" href="mailto:repair.cafe.bourgenbresse@gmail.com?subject=Je%20souhaite%20devenir%20b%C3%A9n%C3%A9vole">Je veux aider</a></p>
         </div>
         <div>
           <h3>Compétences recherchées</h3>
@@ -354,18 +311,11 @@
       <dl class="contact-list">
         <div>
           <dt>E-mail</dt>
-          <!-- TODO : remplacer l'adresse dans le mailto ci-dessous -->
-          <dd><a href="mailto:[EMAIL DE CONTACT]"><span class="tbd">[EMAIL DE CONTACT]</span></a></dd>
-        </div>
-        <div>
-          <dt>Téléphone</dt>
-          <!-- TODO : remplacer le numéro dans le lien tel: ci-dessous -->
-          <dd><a href="tel:[NUMÉRO DE TÉLÉPHONE]"><span class="tbd">[NUMÉRO DE TÉLÉPHONE]</span></a></dd>
+          <dd><a href="mailto:repair.cafe.bourgenbresse@gmail.com">repair.cafe.bourgenbresse@gmail.com</a></dd>
         </div>
         <div>
           <dt>Facebook</dt>
-          <!-- TODO : remplacer l'URL dans le href ci-dessous -->
-          <dd><a href="[LIEN FACEBOOK]"><span class="tbd">[LIEN FACEBOOK]</span></a></dd>
+          <dd><a href="https://www.facebook.com/p/Repair-Caf%C3%A9-Bourg-en-Bresse-61571959492077/" rel="noopener">Repair Café Bourg-en-Bresse</a></dd>
         </div>
       </dl>
     </div>
@@ -380,7 +330,7 @@
       <div>
         <h3>Repair Café Bourg-en-Bresse</h3>
         <p>
-          Porté par <span class="tbd">[NOM DE L ASSOCIATION]</span>.<br>
+          Association REPAIR CAFE BOURG EN BRESSE.<br>
           Jeter&nbsp;? Pas question.
         </p>
       </div>

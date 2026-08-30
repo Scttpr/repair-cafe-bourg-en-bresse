@@ -90,28 +90,27 @@ laissez le contournement actif.
 | `SEANCE_DUREE_MIN` | `180` | repli : durée minimale, en minutes |
 | `SEANCE_HEURES_MURALES` | `auto` | `1` force la lecture murale, `0` la désactive, `auto` suit `X-WR-TIMEZONE` |
 
-## Les champs à compléter à la main
+## Contenu de la page
 
-Ils s'affichent en orange sur fond rose : impossible de les rater. Cherchez
-`<span class="tbd">` dans `index.html`, remplacez le texte, puis supprimez la
-classe `tbd` pour faire disparaître le surlignage.
-
-| Placeholder | Ce qu'il faut mettre |
-|---|---|
-| `[EMAIL DE CONTACT]` | ⚠️ aussi dans 3 liens `mailto:` |
-| `[NUMÉRO DE TÉLÉPHONE]` | ⚠️ aussi dans le lien `tel:` |
-| `[LIEN FACEBOOK]` | ⚠️ aussi dans le `href` |
-| `[NB]` ×3 | compteurs de la section Impact |
-| `[ANNÉE]` | année de référence des compteurs |
-| `[NOM DE L ASSOCIATION]` | raison sociale exacte, pied de page |
-
-Les liens à corriger en même temps que le texte portent un commentaire `TODO`
-juste au-dessus.
-
-Pour vérifier ce qu'il reste :
+Tous les champs sont renseignés — la page ne contient plus aucun placeholder.
+Pour le vérifier après une modification :
 
 ```bash
-grep -c 'class="tbd"' index.html
+grep -c 'class="tbd"' index.html   # doit renvoyer 0
+```
+
+Contact : `repair.cafe.bourgenbresse@gmail.com` (3 liens `mailto:`) et la page
+Facebook de l'association. Il n'y a volontairement pas de numéro de téléphone.
+
+### Remettre la section « Impact »
+
+Les trois compteurs (objets réparés, kg évités, bénévoles) ont été retirés
+faute de chiffres. **Le CSS correspondant est resté dans `style.css`** — les
+règles `.impact` et `.stats` — il n'y a donc que le HTML à recoller, entre les
+sections « Comment ça se passe » et « Bénévoles » :
+
+```bash
+git show 6e0a83b:index.html | sed -n '/=== IMPACT/,/<\/section>/p'
 ```
 
 ## Publication
