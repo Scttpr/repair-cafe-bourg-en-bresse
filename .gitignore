@@ -1,0 +1,14 @@
+# Systeme
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editeurs
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Outils locaux
+.claude/settings.local.json
