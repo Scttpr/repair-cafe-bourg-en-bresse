@@ -44,7 +44,8 @@ exécution — pour changer la date affichée, changez l'agenda.
 
 Le script gère les récurrences (`RRULE` hebdomadaires et mensuelles, y compris
 « 2e samedi » et « dernier samedi »), les exceptions `EXDATE`, les séances
-déplacées ou annulées, et convertit tout en heure de Paris.
+déplacées ou annulées, et ramène tout en heure de Paris — voir la note sur le
+fuseau de l'agenda ci-dessous, qui demande un traitement particulier.
 
 ### ⚠️ Deux réglages à corriger dans l'agenda
 
@@ -61,9 +62,21 @@ les permanences par un mot-clé (`Permanence — …`) : le script filtre alors 
 le titre, ce qui est fiable, et récupère au passage le lieu et l'adresse.
 
 **2. Le fuseau de l'agenda est réglé sur UTC** (`X-WR-TIMEZONE:UTC`) au lieu
-d'Europe/Paris. Conséquence : le même créneau récurrent tombe à 17h30 en
-septembre mais 16h30 en novembre, l'heure affichée bouge d'une heure à chaque
-changement d'heure. À corriger dans *Paramètres → Fuseau horaire*.
+d'Europe/Paris. Les séances sont saisies en heure de Paris — 15h30 — mais
+Google les exporte suffixées `Z`, donc étiquetées UTC. Prises au mot, elles
+seraient affichées à 17h30 l'été et 16h30 l'hiver.
+
+Le script s'en sort en **lisant l'heure telle qu'écrite** et en l'estampillant
+Europe/Paris, sans conversion : 15h30 dans l'agenda donne 15h30 sur la page,
+toute l'année. Ce contournement s'active tout seul quand le flux annonce
+`X-WR-TIMEZONE:UTC`, et se désamorcera de lui-même le jour où l'agenda
+repassera sur Europe/Paris.
+
+Le corriger vraiment demande deux gestes, dans cet ordre : passer *Paramètres
+→ Fuseau horaire* sur Europe/Paris, **puis** vérifier les horaires affichés —
+Google conserve l'instant absolu des événements existants, ils se retrouveront
+donc à 17h30 et devront être redescendus à 15h30. Tant que ce n'est pas fait,
+laissez le contournement actif.
 
 ### Réglages du script
 
@@ -72,6 +85,7 @@ changement d'heure. À corriger dans *Paramètres → Fuseau horaire*.
 | `SEANCE_ICS_URL` | l'agenda de l'asso | flux `.ics` à lire |
 | `SEANCE_FILTRE` | `permanence\|repair\|caf[eé]\|atelier` | regex sur le titre |
 | `SEANCE_DUREE_MIN` | `180` | repli : durée minimale, en minutes |
+| `SEANCE_HEURES_MURALES` | `auto` | `1` force la lecture murale, `0` la désactive, `auto` suit `X-WR-TIMEZONE` |
 
 ## Les champs à compléter à la main
 

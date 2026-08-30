@@ -252,6 +252,84 @@ verifier(
     '<span data-cal="lieu">A &amp; &lt;b&gt;B&lt;/b&gt;</span>',
 )
 
+print("\n-- heures murales (agenda regle sur UTC) --")
+
+
+def flux_utc(*evenements):
+    corps = "".join(evenements)
+    return (
+        "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nX-WR-TIMEZONE:UTC\r\n"
+        f"{corps}END:VCALENDAR\r\n"
+    )
+
+
+SEANCE_UTC = (
+    "BEGIN:VEVENT\r\nUID:n\r\nDTSTART:20260905T153000Z\r\n"
+    "DTEND:20260905T210000Z\r\nRECURRENCE-ID:20260905T153000Z\r\n"
+    "SUMMARY:Busy\r\nEND:VEVENT\r\n"
+)
+
+verifier(
+    "X-WR-TIMEZONE:UTC declenche la lecture murale",
+    ps.detecter_heures_murales(["X-WR-TIMEZONE:UTC"]),
+    True,
+)
+verifier(
+    "X-WR-TIMEZONE:Europe/Paris ne la declenche pas",
+    ps.detecter_heures_murales(["X-WR-TIMEZONE:Europe/Paris"]),
+    False,
+)
+verifier(
+    "flux sans X-WR-TIMEZONE : comportement UTC normal",
+    ps.detecter_heures_murales(["VERSION:2.0"]),
+    False,
+)
+verifier(
+    "en mode mural, 153000Z se lit 15h30 et non 17h30",
+    ps.lire_date("20260905T153000Z", {}, murale=True).strftime("%H:%M"),
+    "15:30",
+)
+verifier(
+    "hors mode mural, 153000Z reste converti",
+    ps.lire_date("20260905T153000Z", {}, murale=False).strftime("%H:%M"),
+    "17:30",
+)
+verifier(
+    "TZID=UTC est traite comme un Z",
+    ps.lire_date("20260905T153000", {"TZID": "UTC"}, murale=True).strftime("%H:%M"),
+    "15:30",
+)
+verifier(
+    "un vrai TZID reste honore meme en mode mural",
+    ps.lire_date("20260905T140000", {"TZID": "Europe/Paris"}, murale=True).strftime("%H:%M"),
+    "14:00",
+)
+verifier(
+    "bout en bout : la seance du 5 septembre sort a 15h30",
+    prochaine(flux_utc(SEANCE_UTC), MAINTENANT),
+    "2026-09-05 15:30",
+)
+
+debut_m, ev_m, _ = ps.choisir(ps.parser(flux_utc(SEANCE_UTC)), MAINTENANT)
+verifier(
+    "et se termine a 21h00",
+    (debut_m + ev_m.duree).strftime("%H:%M"),
+    "21:00",
+)
+verifier(
+    "l'heure murale ne bouge pas au changement d'heure",
+    prochaine(
+        flux_utc(
+            "BEGIN:VEVENT\r\nUID:o\r\nDTSTART:20261114T153000Z\r\n"
+            "DTEND:20261114T210000Z\r\nSUMMARY:Busy\r\nEND:VEVENT\r\n"
+        ),
+        MAINTENANT,
+    ),
+    "2026-11-14 15:30",
+)
+
+ps.HEURES_MURALES = False
+
 print()
 if ECHECS:
     print(f"{len(ECHECS)} echec(s) :\n")

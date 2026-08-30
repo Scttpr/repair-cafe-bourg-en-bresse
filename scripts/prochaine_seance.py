@@ -92,15 +92,45 @@ def echapper(valeur: str) -> str:
     ).strip()
 
 
-def lire_date(valeur: str, params: dict[str, str]):
-    """Rend un datetime aware, ou un date pour un evenement « journee entiere »."""
+# Les benevoles saisissent des heures de Paris dans un agenda regle sur UTC :
+# Google exporte alors « 15h30 » suffixe Z, et convertir ce Z ajouterait deux
+# heures a l'affichage. En mode « heures murales » on lit l'heure telle quelle.
+# Le jour ou l'agenda repassera sur Europe/Paris, X-WR-TIMEZONE changera et la
+# detection se desamorcera d'elle-meme.
+HEURES_MURALES = False
+
+
+def detecter_heures_murales(lignes: list[str]) -> bool:
+    """Decide si les horodatages de ce flux sont des heures murales de Paris."""
+    reglage = os.environ.get("SEANCE_HEURES_MURALES", "auto").strip().lower()
+    if reglage in ("1", "oui", "true"):
+        return True
+    if reglage in ("0", "non", "false"):
+        return False
+    for ligne in lignes:
+        if ligne.upper().startswith("X-WR-TIMEZONE:"):
+            return ligne.partition(":")[2].strip().upper() in ("UTC", "GMT")
+    return False
+
+
+def lire_date(valeur: str, params: dict[str, str], murale: bool | None = None):
+    """Rend un datetime aware, ou un date pour un evenement « journee entiere ».
+
+    En mode « heures murales » (voir HEURES_MURALES), un horodatage UTC est lu
+    tel qu'ecrit et estampille Europe/Paris, sans decalage.
+    """
+    if murale is None:
+        murale = HEURES_MURALES
     valeur = valeur.strip()
     if params.get("VALUE") == "DATE" or (len(valeur) == 8 and "T" not in valeur):
         return date(int(valeur[0:4]), int(valeur[4:6]), int(valeur[6:8]))
     brut = datetime.strptime(valeur.rstrip("Z"), "%Y%m%dT%H%M%S")
+    tzid = params.get("TZID")
+    en_utc = valeur.endswith("Z") or (tzid or "").upper() in ("UTC", "GMT")
+    if murale and en_utc:
+        return brut.replace(tzinfo=PARIS)
     if valeur.endswith("Z"):
         return brut.replace(tzinfo=ZoneInfo("UTC")).astimezone(PARIS)
-    tzid = params.get("TZID")
     try:
         fuseau = ZoneInfo(tzid) if tzid else PARIS
     except Exception:
@@ -134,9 +164,12 @@ class Evenement:
 
 
 def parser(texte: str) -> list[Evenement]:
+    global HEURES_MURALES
+    lignes = deplier(texte)
+    HEURES_MURALES = detecter_heures_murales(lignes)
     evenements: list[Evenement] = []
     courant: dict | None = None
-    for ligne in deplier(texte):
+    for ligne in lignes:
         if ligne == "BEGIN:VEVENT":
             courant = {"exdates": []}
             continue
@@ -437,6 +470,12 @@ def main() -> int:
     if not evenements:
         print("erreur : aucun evenement dans le flux", file=sys.stderr)
         return 1
+
+    if HEURES_MURALES:
+        print(
+            "note : agenda regle sur UTC — les heures sont lues telles quelles, "
+            "comme des heures de Paris (SEANCE_HEURES_MURALES=0 pour desactiver)"
+        )
 
     maintenant = datetime.now(PARIS)
     debut, ev, avertissement = choisir(evenements, maintenant)
